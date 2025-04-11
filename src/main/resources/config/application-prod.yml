@@ -24,7 +24,14 @@ logging:
     file: UTF-8
 
 spring:
+  datasource:
+    url: jdbc:sqlite:dbProd.sqlite
+    driver-class-name: org.sqlite.JDBC
+
   jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
+    open-in-view: false
     hibernate:
       # Hibernate only checks if the current schema matches the entity
       # If it does not match, the application will not start
@@ -33,7 +40,9 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        format_sql: false
         jdbc:
+          time_zone: UTC
           ddl-auto: validate
 
 server:

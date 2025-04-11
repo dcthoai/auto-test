@@ -21,10 +21,22 @@ logging:
     file: UTF-8
 
 spring:
+  datasource:
+    url: jdbc:sqlite:db.sqlite
+    driver-class-name: org.sqlite.JDBC
+
   jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
 
 server:
   servlet:

@@ -204,3 +204,4 @@ Desktop.ini
 
 /package-lock.json
 /db.sqlite
+/db-test.sqlite

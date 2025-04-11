@@ -39,9 +39,9 @@ public class AuthResource {
     @PostMapping("/register")
     public BaseResponseDTO register(@Valid @RequestBody RegisterRequestDTO requestDTO) {
         CreateAccountRequestDTO accountRequestDTO = new CreateAccountRequestDTO();
+        accountRequestDTO.setEmail(requestDTO.getEmail());
         accountRequestDTO.setUsername(requestDTO.getUsername());
         accountRequestDTO.setPassword(requestDTO.getPassword());
-        accountRequestDTO.setPassword(requestDTO.getEmail());
         Account account = accountService.createNewAccount(accountRequestDTO);
 
         if (Objects.isNull(account) || Objects.isNull(account.getId()) || account.getId() < 1)
