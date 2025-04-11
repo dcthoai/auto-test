@@ -21,4 +21,10 @@ public interface ResultConstants {
 
     // Get data failed
     String DATA_NOT_FOUND = "result.failed.data.notFound";
+
+    // Account information processing result messages
+    String REGISTER_SUCCESS = "result.account.register.success";
+
+    // Authenticate account result messages
+    String LOGIN_SUCCESS = "result.auth.login.success";
 }

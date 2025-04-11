@@ -1,7 +1,13 @@
 package vn.softdream.autotest.dto.auth;
 
+import vn.softdream.autotest.dto.mapping.IRoleDTO;
+import vn.softdream.autotest.dto.response.AuditingEntityDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
-public class AccountDTO {
+public class AccountDTO extends AuditingEntityDTO {
 
     private Integer id;
     private String fullname;
@@ -10,6 +16,8 @@ public class AccountDTO {
     private String address;
     private String phone;
     private String status;
+    private String deviceId;
+    private List<IRoleDTO> accountRoles = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -65,5 +73,21 @@ public class AccountDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public List<IRoleDTO> getAccountRoles() {
+        return accountRoles;
+    }
+
+    public void setAccountRoles(List<IRoleDTO> accountRoles) {
+        this.accountRoles = accountRoles;
     }
 }

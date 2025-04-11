@@ -1,9 +1,11 @@
 package vn.softdream.autotest.dto.auth;
 
+import vn.softdream.autotest.dto.response.AuditingEntityDTO;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class RoleDTO {
+public class RoleDTO extends AuditingEntityDTO {
 
     private Integer id;
     private String name;
