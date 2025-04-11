@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>vn.softdream</groupId>
+    <artifactId>auto-test</artifactId>
+    <version>0.0.1</version>
+    <name>auto-test</name>
+    <description>auto-test</description>
+
+    <properties>
+        <maven.version>3.6.3</maven.version>
+        <java.version>17</java.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
+        <directory>${project.basedir}/target</directory>
+        <profiles.active>dev</profiles.active>
+        <main-start-class>com.dct.nextgen.NextgenApplication</main-start-class>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.war-plugin.version>3.4.0</maven.war-plugin.version>
+        <maven.spotless-plugin.version>2.40.0</maven.spotless-plugin.version>
+        <maven.compiler-plugin.version>3.11.0</maven.compiler-plugin.version>
+        <maven.enforcer-plugin.version>3.4.1</maven.enforcer-plugin.version>
+        <maven.javadoc-plugin.version>3.6.0</maven.javadoc-plugin.version>
+        <maven.resources-plugin.version>3.3.1</maven.resources-plugin.version>
+        <maven.frontend-plugin.version>1.14.2</maven.frontend-plugin.version>
+        <maven.clean-plugin.version>3.3.2</maven.clean-plugin.version>
+
+        <hibernate.validator.version>8.0.1.Final</hibernate.validator.version>
+        <mysql.version>8.2.0</mysql.version>
+        <google.gson.version>2.10.1</google.gson.version>
+        <jackson.datatype.version>2.15.3</jackson.datatype.version>
+        <model.mapper.version>3.2.0</model.mapper.version>
+        <imageio.webp.version>0.1.6</imageio.webp.version>
+        <jwt.version>0.12.3</jwt.version>
+        <node.version>v18.20.5</node.version>
+        <npm.version>10.8.2</npm.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+        <!-- For handle JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${google.gson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${jackson.datatype.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.datatype.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${model.mapper.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sejda.imageio</groupId>
+            <artifactId>webp-imageio</artifactId>
+            <version>${imageio.webp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.xmlunit</groupId>
+                    <artifactId>xmlunit-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.jayway.jsonpath</groupId>
+                    <artifactId>json-path</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <defaultGoal>spring-boot:run</defaultGoal>
+
+        <!-- Declare default configuration for plugins in the project -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${maven.spotless-plugin.version}</version>
+                    <configuration>
+                        <java>
+                            <removeUnusedImports/>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                        </java>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>spotless</id>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>apply</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${maven.frontend-plugin.version}</version>
+                    <configuration>
+                        <nodeVersion>${node.version}</nodeVersion>
+                        <npmVersion>${npm.version}</npmVersion>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>install-node-and-npm</id>
+                            <goals>
+                                <goal>install-node-and-npm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>npm install</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>webapp build test</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <phase>test</phase>
+                            <configuration>
+                                <arguments>run webapp:test</arguments>
+                                <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>webapp build prod</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <phase>generate-resources</phase>
+                            <configuration>
+                                <arguments>run webapp:prod</arguments>
+                                <environmentVariables>
+                                    <APP_VERSION>${project.version}</APP_VERSION>
+                                </environmentVariables>
+                                <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven.clean-plugin.version}</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>target/classes/static/</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-configuration-processor</artifactId>
+                                <version>${spring-boot.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven.enforcer-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-versions</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>enforce-dependencyConvergence</id>
+                            <configuration>
+                                <rules>
+                                    <DependencyConvergence/>
+                                </rules>
+                                <fail>false</fail>
+                            </configuration>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <message>You are running an older version. Requires at least Maven ${maven.version}</message>
+                                <version>[${maven.version},)</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <message>You are running an incompatible version of Java. Supports JDK 17 or 21</message>
+                                <version>[17,18),[21,22)</version>
+                            </requireJavaVersion>
+                        </rules>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven.javadoc-plugin.version}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven.resources-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>config-resources</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                                <useDefaultDelimiters>false</useDefaultDelimiters>
+                                <delimiters>
+                                    <delimiter>#</delimiter>
+                                </delimiters>
+                                <resources>
+                                    <resource>
+                                        <directory>src/main/resources/</directory>
+                                        <filtering>true</filtering>
+                                        <includes>
+                                            <include>config/*.yml</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-war</id>
+                            <goals>
+                                <goal>war</goal>
+                            </goals>
+                            <phase>package</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <warSourceDirectory>target/classes/static/</warSourceDirectory>
+                        <webResources>
+                            <resource>
+                                <directory>src/main/webapp</directory>
+                                <includes>
+                                    <include>WEB-INF/**</include>
+                                </includes>
+                            </resource>
+                        </webResources>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Check style code -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Determine version Java build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <!-- Handling static resources during build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+
+            <!-- Generate API docs from Java docs comments -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <!-- Control consistent build environment: versions of Maven, Java, dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+
+            <!-- Build Angular with node and npm -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

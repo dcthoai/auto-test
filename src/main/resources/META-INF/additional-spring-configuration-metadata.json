@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "dct-base.domain",
+      "type": "java.lang.String",
+      "description": "Description for dct-base.domain."
+    }
+  ]
+}

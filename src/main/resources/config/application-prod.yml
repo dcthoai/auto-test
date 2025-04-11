@@ -1,0 +1,64 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overridden by the Spring profile you use
+# For example: application-dev.yml if you use the "dev" profile.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# https://docs.spring.io/spring-boot/reference/features/profiles.html
+# ===================================================================
+
+logging:
+  level:
+    root: info
+    vn.softdream.autotest: info
+    org.hibernate.sql: info
+  file:
+    path: /mnt/logs
+    name: ${logging.file.path}/clusterLogData.log # Used by default. Overridden by configuration in logback-spring.xml
+  charset:
+    console: UTF-8
+    file: UTF-8
+
+spring:
+  jpa:
+    # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
+    hibernate:
+      # Hibernate only checks if the current schema matches the entity
+      # If it does not match, the application will not start
+      # Do not make any changes to the schema
+      ddl-auto: validate
+  thymeleaf:
+    cache: false
+
+server:
+  servlet:
+    session:
+      cookie:
+        # The session cookie that Spring Boot creates will have the HttpOnly attribute
+        # Setting HttpOnly helps protect cookies from Cross-Site Scripting (XSS) attacks
+        # Cookies will still be sent with each HTTP request (and can therefore be used for session authentication)
+        # But Cookies cannot be accessed from the client side using JavaScript (e.g. via document.cookie)
+        http-only: true
+  port: 8000
+
+dct-base:
+  domain: http://localhost:${server.port}
+  security:
+    auth:
+      enabled-tls: true
+      base64-secret-key: ${AUTO_TEST_SECRET_KEY}
+      # Token is valid default in 1 hour and 24 hours for remember me
+      token-validity: 3600000 # milliseconds
+      token-validity-for-remember-me: 86400000 # milliseconds
+
+  resources:
+    upload:
+      upload-path: D:/Downloads/

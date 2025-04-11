@@ -1,0 +1,47 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overridden by the Spring profile you use
+# For example: application-dev.yml if you use the "dev" profile.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# https://docs.spring.io/spring-boot/reference/features/profiles.html
+# ===================================================================
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: auto-tests
+  profiles:
+    active: "@profiles.active@"
+  jpa:
+    # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  thymeleaf:
+    cache: false
+  jackson:
+    time-zone: UTC
+  servlet:
+    multipart:
+      enabled: true
+      # Maximum size of the entire HTTP request when uploading multipart data (including files and other parameters)
+      max-request-size: 50MB
+      # Maximum size for each file that a user can upload
+      max-file-size: 30MB
+
+server:
+  servlet:
+    session:
+      cookie:
+        # The session cookie that Spring Boot creates will have the HttpOnly attribute
+        # Setting HttpOnly helps protect cookies from Cross-Site Scripting (XSS) attacks
+        # Cookies will still be sent with each HTTP request (and can therefore be used for session authentication)
+        # But Cookies cannot be accessed from the client side using JavaScript (e.g. via document.cookie)
+        http-only: true
