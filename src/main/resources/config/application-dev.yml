@@ -78,6 +78,23 @@ dct-base:
       # Token is valid default in 1 hour and 24 hours for remember me
       token-validity: 3600000 # milliseconds
       token-validity-for-remember-me: 86400000 # milliseconds
+    oauth2:
+      enabled: false
+      base-authorize-uri: /api/p/common/auth/oauth2/authorize
+      default-redirect-uri: ${dct-base.domain}/login/oauth2/code/
+      redirect-uri: ${dct-base.domain}/api/p/common/callback/auth/oauth2/code/
+      google:
+        client-registration-id: google
+        client-name: Nextgen Creative
+        client-ID: ${GOOGLE_CLIENT_ID}
+        client-secret: ${GOOGLE_CLIENT_SECRET}
+        scope:
+          - https://www.googleapis.com/auth/userinfo.email
+          - https://www.googleapis.com/auth/userinfo.profile
+        authorization-uri: https://accounts.google.com/o/oauth2/auth
+        token-uri: https://oauth2.googleapis.com/token
+        user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+        username-attribute-name: sub
 
   resources:
     upload:

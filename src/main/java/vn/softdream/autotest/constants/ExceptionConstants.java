@@ -40,6 +40,16 @@ public interface ExceptionConstants {
     String FORBIDDEN = "exception.auth.forbidden";
     String TOKEN_INVALID_OR_EXPIRED = "exception.auth.token.invalidOrExpired";
 
+    // OAuth2 authorization exception
+    String OAUTH2_AUTHORIZATION_CODE_NOT_FOUND = "exception.oauth2.authorizationCode.notFound";
+    String OAUTH2_AUTHORIZATION_CODE_CLIENT_ERROR = "exception.oauth2.authorizationCode.clientError";
+    String OAUTH2_AUTHORIZATION_CODE_SERVER_ERROR = "exception.oauth2.authorizationCode.serverError";
+    String OAUTH2_AUTHORIZATION_CODE_EXCEPTION = "exception.oauth2.authorizationCode.exception";
+    String OAUTH2_USER_INFO_NOT_FOUND = "exception.oauth2.userinfo.notFound";
+    String OAUTH2_USER_INFO_CLIENT_ERROR = "exception.oauth2.userinfo.clientError";
+    String OAUTH2_USER_INFO_SERVER_ERROR = "exception.oauth2.userinfo.serverError";
+    String OAUTH2_USER_INFO_EXCEPTION = "exception.oauth2.userinfo.exception";
+
     // Validate account info exception
     String REGISTER_FAILED = "exception.account.register.failed";
     String ACCOUNT_EXISTED = "exception.account.existed";
