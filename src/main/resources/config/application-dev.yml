@@ -22,18 +22,9 @@ logging:
 
 spring:
   jpa:
-    # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
-    open-in-view: false
-    properties:
-      hibernate:
-        show_sql: true
     hibernate:
-      # Hibernate only checks if the current schema matches the entity
-      # If it does not match, the application will not start
-      # Do not make any changes to the schema
-      ddl-auto: validate
-  thymeleaf:
-    cache: false
+      ddl-auto: update
+    show-sql: true
 
 server:
   servlet:
@@ -48,6 +39,38 @@ server:
 
 dct-base:
   domain: http://localhost:${server.port}
+
+  jpa:
+    persistence-unit-name: dct-autotest-persistence
+    base-entity-packages:
+      - vn.softdream.autotest.entity
+    base-repository-packages:
+      - vn.softdream.autotest.repositories
+
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    database: jdbc:sqlite:db.sqlite
+    username: anonymous
+    password: any
+    hikari:
+      poolName: Hikari
+      # AllowPoolSuspension means pause connection when there is a problem
+      # When the setting is false, the system will not allow to pause connections in pool
+      # Helping to maintain continuous system operation even when there is a problem
+      allow-pool-suspension: false
+      auto-commit: false # Do not automatically commit transactions
+      maximumPoolSize: 15 # Maximum database connections
+      minimumIdle: 2 # At least connections will be kept idle, ready for use
+      maxLifetime: 1200000 # Maximum time (20 minutes) that a connection can exist in the pool before being closed and recreated
+      idleTimeout: 600000 # Maximum time (10 minutes) that a connection can be idle before being closed
+      connectionTimeout: 60000 # Maximum time (1 minutes) to wait for connection from pool when no connection is available
+      leak-detection-threshold: 60000 # If a connection is not returned to the pool after 2 minutes, it will be detected as a "leak"
+      datasource-properties:
+        cachePrepStmts: true # Enable caching to improve performance when using multiple identical statements
+        prepStmtCacheSize: 100 # Prepared statement cache size. In this case, the cache can hold up to 100 statements
+        prepStmtCacheSqlLimit: 1024 # Limits the maximum length (in bytes) of an SQL statement that can be cached
+        useServerPrepStmts: true # Enable server-side prepared statements instead of client-side prepared statements
+
   security:
     auth:
       enabled-tls: false

@@ -8,6 +8,6 @@ public class WelcomeResource {
 
     @GetMapping("/")
     public String welcome() {
-        return "<h1 style=\"width: 300px; margin: 0 auto; margin-top: 45vh;\">Welcome to Auto Tests</h1>";
+        return "<h1 style=\"width: 400px; margin: 0 auto; margin-top: 45vh;\">Welcome to DCT Auto Tests</h1>";
     }
 }

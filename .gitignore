@@ -203,3 +203,4 @@ Desktop.ini
 /.nyc_output/
 
 /package-lock.json
+/db.sqlite

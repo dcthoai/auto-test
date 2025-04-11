@@ -11,21 +11,28 @@
 # https://docs.spring.io/spring-boot/reference/features/profiles.html
 # ===================================================================
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
     name: auto-tests
   profiles:
     active: "@profiles.active@"
+
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+  datasource:
+    url: jdbc:sqlite:db.sqlite
+    driver-class-name: org.sqlite.JDBC
+
   jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
     # Avoid causing LazyInitializationException if querying outside the scope of EntityManager or causing poor performance
     open-in-view: false
     properties:
       hibernate:
+        format_sql: true
         jdbc:
           time_zone: UTC
-  thymeleaf:
-    cache: false
+
   jackson:
     time-zone: UTC
   servlet:

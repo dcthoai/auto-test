@@ -7,6 +7,8 @@ package vn.softdream.autotest.constants;
 @SuppressWarnings("unused")
 public interface BaseConstants {
 
+    String ANONYMOUS_USER = "anonymousUser"; // The default user when not authenticated in Spring Security
+    String DEFAULT_CREATOR = "system"; // Used instead of the default user value mentioned above to store in the database
     String MESSAGE_SOURCE_ENCODING = "UTF-8"; // Specifies the charset for i18n messages
 
     // The location where the resource bundle files for i18n messages are stored
