@@ -25,7 +25,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:sqlite:dbProd.sqlite
+    url: jdbc:sqlite:${DB_PATH} # get from ENV provided by docker-compose
     driver-class-name: org.sqlite.JDBC
 
   jpa:
@@ -68,7 +68,7 @@ dct-base:
 
   datasource:
     driver-class-name: org.sqlite.JDBC
-    database: jdbc:sqlite:db.sqlite
+    database: jdbc:sqlite:${DB_PATH} # get from ENV provided by docker-compose
     username: anonymous
     password: any
     hikari:

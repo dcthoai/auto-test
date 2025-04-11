@@ -5,8 +5,9 @@
     <groupId>vn.softdream</groupId>
     <artifactId>auto-test</artifactId>
     <version>0.0.1</version>
-    <name>auto-test</name>
-    <description>auto-test</description>
+    <packaging>jar</packaging>
+    <name>DCT Auto Tests</name>
+    <description>Application to help execute postman test collections automatically</description>
 
     <properties>
         <maven.version>3.6.3</maven.version>
@@ -396,34 +397,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${maven.war-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>default-war</id>
-                            <goals>
-                                <goal>war</goal>
-                            </goals>
-                            <phase>package</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <warSourceDirectory>target/classes/static/</warSourceDirectory>
-                        <webResources>
-                            <resource>
-                                <directory>src/main/webapp</directory>
-                                <includes>
-                                    <include>WEB-INF/**</include>
-                                </includes>
-                            </resource>
-                        </webResources>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -431,6 +404,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Check style code -->
@@ -461,11 +442,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
             </plugin>
 
             <!-- Build Angular with node and npm -->

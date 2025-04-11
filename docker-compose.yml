@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    image: auto-tests-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - auto-tests-db:/app/db
+      - auto-tests-logs:/mnt/logs
+    environment:
+      DB_PATH: /app/db/dbProd.sqlite
+    restart: unless-stopped
+
+volumes:
+  auto-tests-db:   # For save file dbProd.sqlite
+  auto-tests-logs: # For save log files in /mnt/logs
