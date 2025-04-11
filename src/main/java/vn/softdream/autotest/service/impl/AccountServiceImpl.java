@@ -91,12 +91,6 @@ public class AccountServiceImpl implements AccountService {
             throw new BaseBadRequestException(ENTITY_NAME, ExceptionConstants.ACCOUNT_EXISTED);
         }
 
-        List<IRoleDTO> roles = roleRepository.findAllByIds(request.getRoleIds());
-
-        if (roles.isEmpty() || roles.size() != request.getRoleIds().size()) {
-            throw new BaseBadRequestException(ENTITY_NAME, ExceptionConstants.ROLE_PERMISSION_INVALID);
-        }
-
         String rawPassword = request.getPassword();
         String hashedPassword = passwordEncoder.encode(rawPassword);
 
@@ -106,9 +100,17 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountConstants.STATUS.ACTIVE);
         accountRepository.save(account);
 
-        List<AccountRole> accountRoles = new ArrayList<>();
-        roles.forEach(role -> accountRoles.add(new AccountRole(account.getId(), role.getId())));
-        accountRoleRepository.saveAll(accountRoles);
+        if (!request.getRoleIds().isEmpty()) {
+            List<IRoleDTO> roles = roleRepository.findAllByIds(request.getRoleIds());
+
+            if (roles.isEmpty() || roles.size() != request.getRoleIds().size()) {
+                throw new BaseBadRequestException(ENTITY_NAME, ExceptionConstants.ROLE_PERMISSION_INVALID);
+            }
+
+            List<AccountRole> accountRoles = new ArrayList<>();
+            roles.forEach(role -> accountRoles.add(new AccountRole(account.getId(), role.getId())));
+            accountRoleRepository.saveAll(accountRoles);
+        }
 
         return account;
     }
