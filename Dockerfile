@@ -5,10 +5,26 @@ FROM maven:3.8.5-openjdk-17 AS build
 
 WORKDIR /app
 
-COPY pom.xml .
+# Copy only Maven config files first to leverage Docker cache
+COPY pom.xml ./
+
+# Cache Maven dependencies
 RUN mvn dependency:go-offline -B
 
+# Install Node.js v18.20.5 and npm 10.8.2
+RUN mvn frontend:install-node-and-npm
+
+# Copy package.json and package-lock.json for caching node_modules
+COPY package.json package-lock.json ./
+RUN mvn frontend:npm
+
+# Copy Angular config files
+COPY angular.json server.ts tsconfig*.json ./
+
+# Copy full source code
 COPY src ./src
+
+# Build backend and frontend (Angular)
 RUN mvn clean package -Pprod -DskipTests
 
 # ==============================
@@ -18,18 +34,14 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy JAR file from builder
-COPY --from=build /app/target/*.jar app.jar
+# Copy Spring Boot JAR from the build stage
+COPY --from=build /app/target/auto-tests-*.jar app.jar
 
-# Create a folder for SQLite DB and application logs
-RUN mkdir -p /app/db && chmod -R 777 /app/db
-RUN mkdir -p /mnt/logs && chmod -R 777 /mnt/logs
+# Copy static Angular build files (already integrated by Spring Boot)
+COPY --from=build /app/target/classes/static /app/static
 
-# Set ENV for database path (optional)
-ENV DB_PATH=/app/db/dbProd.sqlite
-
-# Expose app port
+# Expose application port
 EXPOSE 8080
 
-# Run the Spring Boot JAR
+# Run the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]

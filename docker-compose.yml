@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     image: auto-tests-prod
@@ -11,12 +9,15 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - auto-tests-db:/app/db
-      - auto-tests-logs:/mnt/logs
+      - db:/app/db
+      - logs:/mnt/logs
+      - uploads:/app/uploads
     environment:
       DB_PATH: /app/db/dbProd.sqlite
+      UPLOADS_PATH: /app/uploads/
     restart: unless-stopped
 
 volumes:
-  auto-tests-db:   # For save file dbProd.sqlite
-  auto-tests-logs: # For save log files in /mnt/logs
+  db:   # For saving the db file dbProd.sqlite
+  logs: # For saving log files in /mnt/logs
+  uploads: # For uploads resources

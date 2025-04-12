@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>vn.softdream</groupId>
-    <artifactId>auto-test</artifactId>
+    <artifactId>auto-tests</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>DCT Auto Tests</name>
@@ -246,6 +246,7 @@
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${maven.frontend-plugin.version}</version>
                     <configuration>
+                        <workingDirectory>${project.basedir}</workingDirectory>
                         <nodeVersion>${node.version}</nodeVersion>
                         <npmVersion>${npm.version}</npmVersion>
                     </configuration>
@@ -257,10 +258,13 @@
                             </goals>
                         </execution>
                         <execution>
-                            <id>npm install</id>
+                            <id>npm-install</id>
                             <goals>
                                 <goal>npm</goal>
                             </goals>
+                            <configuration>
+                                <arguments>install</arguments>
+                            </configuration>
                         </execution>
                         <execution>
                             <id>webapp build test</id>
@@ -274,7 +278,7 @@
                             </configuration>
                         </execution>
                         <execution>
-                            <id>webapp build prod</id>
+                            <id>webapp-build-prod</id>
                             <goals>
                                 <goal>npm</goal>
                             </goals>
