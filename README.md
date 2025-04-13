@@ -25,7 +25,7 @@ mvn clean package -Pprod -DskipTests
 
 ---
 
-## 🐳 Docker Setup (Production)
+## 🐳 Docker Setup (Testing production with Docker local)
 
 ### 🔒 Environment Variables
 Set these before starting the app (define in a `.env` file in root project path):
@@ -134,7 +134,7 @@ volumes:
 
 ---
 
-## 🚀 Running the Application
+## 🚀 Running the Application (Docker local)
 
 ### First-Time Setup (Detailed steps)
 
@@ -226,6 +226,161 @@ docker-compose logs -f
 ```
 
 Or view logs for specific service:
+```bash
+docker-compose logs -f app
+```
+
+---
+
+## Deploy to Production Server with Docker Registry (Docker Hub)
+Use the configuration guidelines from the previous steps and follow the instructions below to deploy the application to a production server instead of running it with Docker local.
+
+### Case 1. If you skipped the setup step for testing production on Docker local
+If you **haven't run** `docker-compose up --build -d` as part of testing production with Docker local, follow these steps to build the image and push it to Docker Hub:
+
+#### Step 1. **Build Docker image**:
+```bash
+docker build -t <your-username>/<repo-name>:<tag> .
+```
+
+Example:
+```bash
+docker build -t thoaidc/auto-tests-app:0.0.1 .
+```
+
+#### Step 2. **Login to Docker Hub (for first-time use)**:
+```bash
+docker login
+```
+
+#### Step 3. **Push the image to Docker Hub**:
+```bash
+docker push <your-username>/<repo-name>:<tag>
+```
+
+Example:
+```bash
+docker push thoaidc/auto-tests-app:0.0.1
+```
+
+---
+
+### Case 2. If you have already set up testing production with Docker local as described above
+
+If you **have already built** using:
+```bash
+docker-compose up --build -d
+```
+
+The Docker image built will not have the standard tag like `<your-username>/<repo-name>:<tag>`. You will need to **re-tag** the image to push it to Docker Hub.
+
+#### Step 1. **View the list of built images**:
+```bash
+docker images
+```
+
+#### Step 2. **Re-tag the image**:
+```bash
+docker tag <local-image>:<tag> <your-username>/<repo-name>:<tag>
+```
+
+Example:
+```bash
+docker tag auto-tests-prod:0.0.1 thoaidc/auto-tests-app:0.0.1
+```
+
+#### Step 3. **Push to Docker Hub**:
+```bash
+docker push <your-username>/<repo-name>:<tag>
+```
+
+Example:
+```bash
+docker push thoaidc/auto-tests-app:0.0.1
+```
+
+---
+
+### Notes
+
+- The default build from `docker-compose` can be re-tagged multiple times to serve different environments such as dev, prod, latest, etc.
+- When deploying on the production server, you should pull the image from Docker Hub instead of building it from source.
+
+### Running the Application on the Production Server
+
+After the Docker image has been pushed to Docker Hub, follow these steps to launch the application (directly on the server):
+
+#### Step 1: Log in to Docker Hub
+```bash
+docker login
+```
+
+#### Step 2: Pull the Docker Image from Docker Hub
+
+Pull the Docker image that was pushed to Docker Hub to the production server:
+
+```bash
+docker pull thoaidc/auto-tests-app:0.0.1
+```
+
+#### Step 3: Configure `docker-compose.prod.yml` and `.env` (only first-time setup or update if there are changes for future times)
+On the server, create a configuration file for Docker Compose in the directory where you want to install the application:
+
+**docker-compose.prod.yml**
+```yaml
+services:
+  app:
+    image: thoaidc/auto-tests-prod:0.0.1  # Pull image from Docker Hub
+    container_name: auto-tests-app        # Friendly name for the container
+    env_file:
+      - .env                    # Load environment variables from the .env file
+    ports:
+      - "8080:8080"             # Map host port 8080 to container port 8080
+    volumes:
+      - db:/app/db              # Mount named volume "db" to persist database data at /app/db
+      - uploads:/app/uploads    # Mount named volume "uploads" to persist uploaded files at /app/uploads
+    environment:
+      DB_PATH: /app/db/dbProd.sqlite  # Custom environment variable for the database file path inside the container
+      UPLOADS_PATH: /app/uploads/     # Custom environment variable for the uploads directory inside the container
+    restart: unless-stopped     # Automatically restart the container unless it is manually stopped
+
+volumes:
+  db:      # Named volume to persist SQLite database file (dbProd.sqlite)
+  uploads: # Named volume to persist uploaded resources (e.g., images, logo, licenses)
+```
+
+**.env**
+```env
+AUTO_TEST_SECRET_KEY=your_base64_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+DB_PATH=/app/db/dbProd.sqlite
+UPLOADS_PATH=/app/uploads/
+```
+
+#### Step 4: Run Docker Compose on the Production Server
+
+After configuring `docker-compose.prod.yml` and `.env`, cd to the application installation directory where the configuration files were created above and run Docker compose:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+The command above will:
+- Pull the Docker image from Docker Hub (if not already pulled).
+- Initialize the container from the downloaded Docker image.
+- Open port 8080 so the application can be accessed via `http://your-server-ip:8080`.
+
+#### Step 5: Check Logs (Optional)
+
+After the application is running, you can check the logs to ensure everything is working as expected:
+
+```bash
+docker-compose logs -f
+```
+
+Or check the logs for the specific container `app`:
+
 ```bash
 docker-compose logs -f app
 ```

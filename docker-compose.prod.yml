@@ -1,0 +1,19 @@
+services:
+  app:
+    image: thoaidc/auto-tests-prod:0.0.1  # Pull image from Docker Hub
+    container_name: auto-tests-app    # Friendly name for the container
+    env_file:
+      - .env                    # Load environment variables from the .env file
+    ports:
+      - "8080:8080"             # Map host port 8080 to container port 8080
+    volumes:
+      - db:/app/db              # Mount named volume "db" to persist database data at /app/db
+      - uploads:/app/uploads    # Mount named volume "uploads" to persist uploaded files at /app/uploads
+    environment:
+      DB_PATH: /app/db/dbProd.sqlite  # Custom environment variable for the database file path inside the container
+      UPLOADS_PATH: /app/uploads/     # Custom environment variable for the uploads directory inside the container
+    restart: unless-stopped     # Automatically restart the container unless it is manually stopped
+
+volumes:
+  db:      # Named volume to persist SQLite database file (dbProd.sqlite)
+  uploads: # Named volume to persist uploaded resources (e.g., images, logo, licenses)
