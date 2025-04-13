@@ -165,6 +165,18 @@ The above command will execute:
 - Create container from built image and run in background
 - Start the service on port `8080`
 
+Or if you want to run the two steps of building the image and running the container separately:
+
+1. **Run build**:
+   ```bash
+   docker-compose build
+   ```
+
+2. **Run up** (after building):
+   ```bash
+   docker-compose up -d
+   ```
+
 #### Step 4: Verify the application is running
 Open your browser at:
 ```
@@ -384,6 +396,40 @@ Or check the logs for the specific container `app`:
 ```bash
 docker-compose logs -f app
 ```
+
+### **Redeploy with New Docker image (New application version)**
+
+#### Step 1: **Pull the New Docker Image from Docker Hub**
+
+Update the image tag in the `docker-compose.prod.yml` file and update environment variables in the `.env` file if there are any changes.
+Then, run the following command to pull the new image from Docker Hub:
+
+```bash
+docker pull <your-username>/<repo-name>:<new-tag>
+```
+
+Example:
+```bash
+docker pull thoaidc/auto-tests-app:0.0.2
+```
+
+#### Step 2: **Restart Docker Compose**
+
+After pulling the new Docker image, restart the container with the new image:
+
+1. **Stop and remove the running containers**:
+
+   ```bash
+   docker-compose -f docker-compose.prod.yml down
+   ```
+
+2. **Restart the container with the new image**:
+
+   After stopping and removing the old container, use the `up` command with the `-d` flag to run the containers with the new image in detached mode:
+
+   ```bash
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
 
 ---
 
