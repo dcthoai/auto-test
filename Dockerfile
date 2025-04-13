@@ -38,6 +38,7 @@ WORKDIR /app
 COPY dbchangelog/init_*.sql ./initdb/
 COPY docker-initdb.sh ./
 
+# Install sqilte3
 RUN apt-get update && apt-get install -y sqlite3
 
 # Copy Spring Boot JAR from the build stage

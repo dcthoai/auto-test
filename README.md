@@ -1,17 +1,18 @@
 # Auto Tests Application – Spring Boot + SQLite + Dockerized Setup
 
-A production-ready **Spring Boot** application packaged as a **standalone JAR** (with embedded Tomcat), using **SQLite** for file-based persistence. This application is containerized via Docker with persistent volumes for database and logs.
+A production-ready **Spring Boot** application packaged as a **standalone JAR** (with embedded Tomcat), using **SQLite** for file-based persistence. 
+This application is containerized via Docker with persistent volumes for database.
 
 ---
 
-## Project Structure & Build
+## Project structure & Build
 
 ### Build Tools
 - **Java**: JDK 17
 - **Build Tool**: Maven 3.8.5
 - **Application**: Built as a **standalone JAR** with embedded Tomcat
 - **Database**: Uses SQLite as embedded database (file-based)
-- **Frontend (optional)**: Handled via `frontend-maven-plugin` (e.g., for Angular)
+- **Frontend**: Handled via `frontend-maven-plugin` (for Angular)
 
 ### Build & Packaging
 - Maven profile: `prod`
@@ -27,11 +28,12 @@ mvn clean package -Pprod -DskipTests
 ## 🐳 Docker Setup (Production)
 
 ### 🔒 Environment Variables
-Set these before starting the app (define in a `.env` file):
+Set these before starting the app (define in a `.env` file in root project path):
+
 ```bash
-export AUTO_TEST_SECRET_KEY=your_base64_secret_key
-export GOOGLE_CLIENT_ID=your_google_client_id
-export GOOGLE_CLIENT_SECRET=your_google_client_secret
+AUTO_TEST_SECRET_KEY=your_base64_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
 ---
@@ -79,6 +81,7 @@ WORKDIR /app
 COPY dbchangelog/init_*.sql ./initdb/
 COPY docker-initdb.sh ./
 
+# Install sqilte3
 RUN apt-get update && apt-get install -y sqlite3
 
 # Copy Spring Boot JAR from the build stage
@@ -100,53 +103,52 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ```yaml
 services:
-    app:
-        image: auto-tests-prod:0.0.1 # Change this version to match the version in pom.xml for consistency
-        container_name: auto-tests-app
-        build:
-            context: .
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        ports:
-            - "8080:8080"
-        volumes:
-            - db:/app/db
-            - uploads:/app/uploads
-        environment:
-            DB_PATH: /app/db/dbProd.sqlite
-            UPLOADS_PATH: /app/uploads/
-        restart: unless-stopped
+  app:
+    image: auto-tests-prod:0.0.1    # Docker image name and version (should match the version in pom.xml for consistency)
+    container_name: auto-tests-app  # Friendly name for the container
+    build:
+      context: .                # Use the current directory as the build context
+      dockerfile: Dockerfile    # Specify the Dockerfile to use for building the image
+    env_file:
+      - .env                    # Load environment variables from the .env file
+    ports:
+      - "8080:8080"             # Map host port 8080 to container port 8080
+    volumes:
+      - db:/app/db              # Mount named volume "db" to persist database data at /app/db
+      - uploads:/app/uploads    # Mount named volume "uploads" to persist uploaded files at /app/uploads
+    environment:
+      DB_PATH: /app/db/dbProd.sqlite  # Custom environment variable for the database file path inside the container
+      UPLOADS_PATH: /app/uploads/     # Custom environment variable for the uploads directory inside the container
+    restart: unless-stopped     # Automatically restart the container unless it is manually stopped
 
 volumes:
-    db:  # For saving the db file dbProd.sqlite
-    uploads: # For upload resources
+  db:       # Named volume to persist SQLite database file (dbProd.sqlite)
+  uploads:  # Named volume to persist uploaded resources (e.g., images, logo, licenses)
 ```
 
 ### 📂 Volume Mapping
 | Volume Name        | Container Path  | Purpose                     |
 |--------------------|-----------------|-----------------------------|
 | auto-tests_db      | `/app/db`       | Persistent SQLite database  |
-| auto-tests_logs    | `/mnt/logs`     | Persistent application logs |
 | auto-tests_uploads | `/app/uploads/` | Persistent upload resources |
 
 ---
 
 ## 🚀 Running the Application
 
-### First-Time Setup (Detailed Steps)
+### First-Time Setup (Detailed steps)
 
-#### Step 1: Prepare Environment Variables
-You can export them directly or place them into a `.env` file (recommended for Docker Compose).
+#### Step 1: Prepare Environment variables
+Create an `.env` file in root project path (recommended for Docker Compose):
 
-Example `.env` file:
 ```env
 AUTO_TEST_SECRET_KEY=your_base64_secret_key
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
-#### Step 2: Build the Project (Optional for Local Testing)
+#### Step 2: Build project (Optional for local testing)
+
 ```bash
 mvn clean package -Pprod -DskipTests
 ```
@@ -156,8 +158,9 @@ mvn clean package -Pprod -DskipTests
 ```bash
 docker-compose up --build -d
 ```
+
 The above command will execute:
-- Build the image from source
+- Build the image from source code
 - Create the necessary volumes (if not exist)
 - Create container from built image and run in background
 - Start the service on port `8080`
@@ -189,18 +192,19 @@ docker-compose logs -f
 
 ---
 
-### Redeploy with Code Changes
-1. Update your code
-2. Rebuild and restart app with:
+### Redeploy with Code changes
+#### 1. Update source code
+#### 2. Rebuild and restart app with:
+
 ```bash
 docker-compose up --build -d
 ```
-> Persistent data in volumes (`auto-tests_db`, `auto-tests_logs`, `auto-tests_uploads`) will not be affected.
+> Persistent data in volumes (`auto-tests_db`, `auto-tests_uploads`) will not be affected.
 
 ---
 
-### Stopping the App
-Stop all services and remove containers:
+### Stopping and Remove
+**Stop** all services and **remove** containers:
 ```bash
 docker-compose down
 ```
@@ -231,4 +235,3 @@ docker-compose logs -f app
 ## Maintainer
 Created by **Công Thoại**  
 Email: [dcthoai@gmail.com](mailto:dcthoai@gmail.com)
-

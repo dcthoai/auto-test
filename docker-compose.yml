@@ -1,22 +1,22 @@
 services:
   app:
-    image: auto-tests-prod:0.0.1 # Change this version to match the version in pom.xml for consistency
-    container_name: auto-tests-app
+    image: auto-tests-prod:0.0.1    # Docker image name and version (should match the version in pom.xml for consistency)
+    container_name: auto-tests-app  # Friendly name for the container
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .                # Use the current directory as the build context
+      dockerfile: Dockerfile    # Specify the Dockerfile to use for building the image
     env_file:
-      - .env
+      - .env                    # Load environment variables from the .env file
     ports:
-      - "8080:8080"
+      - "8080:8080"             # Map host port 8080 to container port 8080
     volumes:
-      - db:/app/db
-      - uploads:/app/uploads
+      - db:/app/db              # Mount named volume "db" to persist database data at /app/db
+      - uploads:/app/uploads    # Mount named volume "uploads" to persist uploaded files at /app/uploads
     environment:
-      DB_PATH: /app/db/dbProd.sqlite
-      UPLOADS_PATH: /app/uploads/
-    restart: unless-stopped
+      DB_PATH: /app/db/dbProd.sqlite  # Custom environment variable for the database file path inside the container
+      UPLOADS_PATH: /app/uploads/     # Custom environment variable for the uploads directory inside the container
+    restart: unless-stopped     # Automatically restart the container unless it is manually stopped
 
 volumes:
-  db:  # For saving the db file dbProd.sqlite
-  uploads: # For upload resources
+  db:      # Named volume to persist SQLite database file (dbProd.sqlite)
+  uploads: # Named volume to persist uploaded resources (e.g., images, logo, licenses)
