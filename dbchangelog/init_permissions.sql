@@ -1,5 +1,25 @@
 PRAGMA foreign_keys = ON;
 
+-- Create SUPER_ADMIN role
+INSERT INTO role (
+    id,
+    name,
+    code,
+    created_by,
+    created_date,
+    last_modified_by,
+    last_modified_date
+) VALUES (
+    1,
+    'Administrator',
+    'ROLE_ADMIN',
+    'system',
+    CURRENT_TIMESTAMP,
+    'system',
+    CURRENT_TIMESTAMP
+);
+
+-- Create permissions
 -- === Manage System ===
 INSERT INTO permission (id, name, code, description, parent_id, parent_code, created_by)
 VALUES (1, 'permission.system', '01', 'permission.system.description', NULL, NULL, 'admin');
@@ -27,21 +47,3 @@ INSERT INTO permission (id, name, code, description, parent_id, parent_code, cre
 (11, 'permission.role.create', '0302', 'permission.role.create.description', 9, '03', 'admin'),
 (12, 'permission.role.update', '0303', 'permission.role.update.description', 9, '03', 'admin'),
 (13, 'permission.role.delete', '0304', 'permission.role.delete.description', 9, '03', 'admin');
-
-INSERT INTO role (
-    id,
-    name,
-    code,
-    created_by,
-    created_date,
-    last_modified_by,
-    last_modified_date
-) VALUES (
-    1,
-    'Administrator',
-    'ROLE_ADMIN',
-    'system',
-    CURRENT_TIMESTAMP,
-    'system',
-    CURRENT_TIMESTAMP
-);

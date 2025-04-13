@@ -19,11 +19,16 @@ logging:
   charset:
     console: UTF-8
     file: UTF-8
+  # Custom properties to define logs file paths according to different profiles
+  file-path: mnt/logs
 
 spring:
   datasource:
     url: jdbc:sqlite:db.sqlite
     driver-class-name: org.sqlite.JDBC
+  sql:
+    init:
+      mode: never
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
@@ -37,6 +42,7 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+          ddl-auto: update
 
 server:
   servlet:

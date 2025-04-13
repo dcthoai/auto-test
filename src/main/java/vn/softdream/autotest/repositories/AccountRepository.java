@@ -53,10 +53,10 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     Long countByUsernameOrEmailAndIdNot(String username, String email, Integer accountId);
 
     @Modifying
-    @Query(value = "UPDATE account a SET a.status = ?2 WHERE a.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE account SET status = ?2 WHERE id = ?1", nativeQuery = true)
     void updateAccountStatusById(Integer accountId, String status);
 
     @Modifying
-    @Query(value = "UPDATE account a SET a.device_id = ?2 WHERE a.id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE account SET device_id = ?2 WHERE id = ?1", nativeQuery = true)
     void updateDeviceIdByAccountId(Integer accountId, String deviceId);
 }

@@ -75,6 +75,12 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+# Copy initial database sql files and script sh
+COPY dbchangelog/init_*.sql ./initdb/
+COPY docker-initdb.sh ./
+
+RUN apt-get update && apt-get install -y sqlite3
+
 # Copy Spring Boot JAR from the build stage
 COPY --from=build /app/target/auto-tests-*.jar app.jar
 
@@ -95,7 +101,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ```yaml
 services:
     app:
-        image: auto-tests-prod
+        image: auto-tests-prod:0.0.1 # Change this version to match the version in pom.xml for consistency
+        container_name: auto-tests-app
         build:
             context: .
             dockerfile: Dockerfile
@@ -105,7 +112,6 @@ services:
             - "8080:8080"
         volumes:
             - db:/app/db
-            - logs:/mnt/logs
             - uploads:/app/uploads
         environment:
             DB_PATH: /app/db/dbProd.sqlite
@@ -113,9 +119,8 @@ services:
         restart: unless-stopped
 
 volumes:
-    db:   # For saving the db file dbProd.sqlite
-    logs: # For saving log files in /mnt/logs
-    uploads: # For uploads resources
+    db:  # For saving the db file dbProd.sqlite
+    uploads: # For upload resources
 ```
 
 ### 📂 Volume Mapping
@@ -151,12 +156,13 @@ mvn clean package -Pprod -DskipTests
 ```bash
 docker-compose up --build -d
 ```
-This will:
+The above command will execute:
 - Build the image from source
 - Create the necessary volumes (if not exist)
+- Create container from built image and run in background
 - Start the service on port `8080`
 
-#### Step 4: Verify the App is Running
+#### Step 4: Verify the application is running
 Open your browser at:
 ```
 http://localhost:8080
@@ -167,7 +173,16 @@ Use the following command to verify the container is running:
 docker ps
 ```
 
-#### Step 5: Check Logs
+#### Step 5: Initialize database structure
+
+After checking and ensuring that the application has launched successfully and the database (dbProd.sqlite) has been created, 
+run the following command to initialize the database structure for the application:
+
+```bash
+docker exec -i auto-tests-app bash /app/docker-initdb.sh
+```
+
+#### Step 6: Check logs (Optional)
 ```bash
 docker-compose logs -f
 ```

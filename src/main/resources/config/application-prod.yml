@@ -16,17 +16,19 @@ logging:
     root: info
     vn.softdream.autotest: info
     org.hibernate.sql: info
-  file:
-    path: /mnt/logs
-    name: ${logging.file.path}/clusterLogData.log # Used by default. Overridden by configuration in logback-spring.xml
   charset:
     console: UTF-8
     file: UTF-8
+  # Custom properties to define logs file paths according to different profiles
+  file-path: /mnt/logs
 
 spring:
   datasource:
     url: jdbc:sqlite:${DB_PATH} # get from ENV provided by docker-compose
     driver-class-name: org.sqlite.JDBC
+  sql:
+    init:
+      mode: never
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect

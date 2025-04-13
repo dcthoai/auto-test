@@ -34,6 +34,12 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
+# Copy initial database sql files and script sh
+COPY dbchangelog/init_*.sql ./initdb/
+COPY docker-initdb.sh ./
+
+RUN apt-get update && apt-get install -y sqlite3
+
 # Copy Spring Boot JAR from the build stage
 COPY --from=build /app/target/auto-tests-*.jar app.jar
 

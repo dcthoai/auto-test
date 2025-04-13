@@ -21,10 +21,12 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
+    <springProperty name="LOG_PATH" source="logging.file-path"/>
+
     <!-- Logging to file with rolling mechanism, creating new log every day -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>mnt/logs/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>10</maxHistory> <!-- Stores maximum logs of the last 10 days -->
         </rollingPolicy>
@@ -40,7 +42,7 @@
 
     <!-- Appender for unsafe log. Dedicated to connection pool leak monitoring log -->
     <appender name = "CONNECTION_POOL_FILE" class = "ch.qos.logback.core.FileAppender">
-        <file>mnt/logs/connection_pool_leak.log</file>
+        <file>${LOG_PATH}/connection_pool_leak.log</file>
         <encoder>
             <charset>utf-8</charset>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</pattern>
