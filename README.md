@@ -342,8 +342,8 @@ On the server, create a configuration file for Docker Compose in the directory w
 ```yaml
 services:
   app:
-    image: thoaidc/auto-tests-prod:0.0.1  # Pull image from Docker Hub
-    container_name: auto-tests-app        # Friendly name for the container
+    image: thoaidc/auto-tests-app:0.0.1  # Pull image from Docker Hub
+    container_name: auto-tests-app       # Friendly name for the container
     env_file:
       - .env                    # Load environment variables from the .env file
     ports:
@@ -395,6 +395,15 @@ Or check the logs for the specific container `app`:
 
 ```bash
 docker-compose logs -f app
+```
+
+#### Step 6: Initialize database structure (only first-time setup)
+
+After checking and ensuring that the application has launched successfully and the database (dbProd.sqlite) has been created,
+run the following command to initialize the database structure for the application:
+
+```bash
+docker exec -i auto-tests-app bash /app/docker-initdb.sh
 ```
 
 ### **Redeploy with New Docker image (New application version)**
