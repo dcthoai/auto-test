@@ -15,7 +15,7 @@
         <spring-boot.version>3.1.5</spring-boot.version>
         <directory>${project.basedir}/target</directory>
         <profiles.active>dev</profiles.active>
-        <main-start-class>com.dct.nextgen.NextgenApplication</main-start-class>
+        <main-start-class>vn.softdream.autotest.AutoTestApplication</main-start-class>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
